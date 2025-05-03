@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
+import Dashboard from '../components/Dashboard';
 
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const token = false;
+  // const token = false;
   
-  useEffect(() => {
-    if (!token) {
-        navigate('/login')
-    }
-  }, [token])
+  // useEffect(() => {
+  //   if (!token) {
+  //       navigate('/login')
+  //   }
+  // }, [token])
 
-  return <div>HomePage</div>;
+  return <>
+   <Dashboard />
+  </>;
 };
 
 export default HomePage;
