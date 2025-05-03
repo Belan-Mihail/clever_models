@@ -3,6 +3,9 @@ from ml_logic import process_data
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return "Flask works!"
 
 @app.route("/api/process", methods=["POST"])
 def process():
