@@ -3,7 +3,7 @@ from ml_logic import process_data
 
 app = Flask(__name__)
 
-# Простой POST-эндпоинт
+
 @app.route("/api/process", methods=["POST"])
 def process():
     try:
