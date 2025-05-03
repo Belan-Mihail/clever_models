@@ -1,8 +1,13 @@
 import React from 'react'
+import ModelCreator from './ModelCreator'
+import ModelTree from './ModelTree'
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div className="flex h-screen">
+        <ModelCreator />
+        <ModelTree />
+    </div>
   )
 }
 
