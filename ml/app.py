@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from ml_logic import process_data  
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:5173"])
@@ -16,8 +17,11 @@ def process():
             return jsonify({"status": "error", "message": "No file part"}), 400
 
         file = request.files['file']
-        if file.filename == '':
-            return jsonify({"status": "error", "message": "No selected file"}), 400
+        filename = file.filename
+        ext = os.path.splitext(filename)[1].lower()
+    
+        if (file.filename == '') or (ext not in ['.xlsx', '.csv', '.xls']):
+            return jsonify({"status": "error", "message": "No selected file/or unexpected file type"}), 400
 
         # main logic
         result = process_data(file)  

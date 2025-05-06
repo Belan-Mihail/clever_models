@@ -1,12 +1,14 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+import os
 
-def process_data(data):
+def process_data(file):
+    filename = file.filename
+    extension = os.path.splitext(filename)[1].lower()
     
-    df = pd.DataFrame(data)
+    if (extension == ".csv"):
+        df = pd.read_csv(file)
+    else:
+        df = pd.read_excel(file)
     
-    scaler = StandardScaler()
-    df_scaled = scaler.fit_transform(df)
-
-    # return as list of lists
-    return df_scaled.tolist()
+    return {"columns": list(df.columns), "rows": len(df)} 
