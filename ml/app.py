@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
-from ml_logic import process_data  # допустим, там есть логика обработки файла
+from ml_logic import process_data  
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:5173"])
 
 @app.route("/")
 def home():
