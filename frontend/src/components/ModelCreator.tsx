@@ -14,14 +14,15 @@ const ModelCreator = () => {
   };
 
   return (
-    <div className="w-[85%] h-full p-4 bg-white">
+    <div className={`w-[85%] h-full p-4 bg-white`}>
 
-      {error && <ErrorNotification error={error} setError={setError} />}
-
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10">
+        {error && <ErrorNotification error={error} setError={setError} />}
+      </div>
+    
       <FileUploader handleFirstStepGeneralAnalyse={handleFirstStepGeneralAnalyse} setError={setError} />
       
       {firstStepGeneralAnalyse && (<SelectFeatures firstStepGeneralAnalyse={firstStepGeneralAnalyse} setError={setError} />)}
-      
     </div>
   );
 };

@@ -89,7 +89,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`max-w-max max-h-max relative p-8 border-2 ${
+        className={`max-w-max max-h-max relative ml-4 p-8 border-2 ${
           isDragOver ? "border-blue-500 bg-blue-50" : "border-gray-300"
         } rounded-2xl flex flex-col gap-4 transition-colors`}
       >
