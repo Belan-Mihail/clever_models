@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 interface FileUploaderProps {
   handleFirstStepGeneralAnalyse: (data: any) => void;
   setError: (data:any) => void;
+  setActiveComponent: (data:any) => void;
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({
-  handleFirstStepGeneralAnalyse, setError
+  handleFirstStepGeneralAnalyse, setError, setActiveComponent
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -63,6 +64,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       const data = await res.json();
       if (data.status === "ok") {
         handleFirstStepGeneralAnalyse(data.result);
+        setActiveComponent("SelectFeatures")
       } else {
         setResponse("Fail upload");
         setError("unexpected file type")
