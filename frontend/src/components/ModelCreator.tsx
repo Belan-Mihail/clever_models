@@ -44,7 +44,7 @@ const ModelCreator = () => {
     
       {activeComponent=="FileUploader" && <FileUploader handleFirstStepGeneralAnalyse={handleFirstStepGeneralAnalyse} setError={setError} setActiveComponent={setActiveComponent} />}
       
-      {activeComponent=="SelectFeatures" && (<SelectFeatures firstStepGeneralAnalyse={firstStepGeneralAnalyse} setError={setError} setActiveComponent={setActiveComponent} handleXFeatures={handleXFeatures} handleYFeatures={handleYFeatures} />)}
+      {activeComponent=="SelectFeatures" && (<SelectFeatures firstStepGeneralAnalyse={firstStepGeneralAnalyse} setError={setError} setActiveComponent={setActiveComponent} handleXFeatures={handleXFeatures} handleYFeatures={handleYFeatures} xFeatures={xFeatures} yFeatures={yFeatures} />)}
     
     </div>
   );
