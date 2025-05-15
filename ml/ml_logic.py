@@ -28,3 +28,10 @@ def first_process_data(file):
         "columns_type": [str(dtype) for dtype in df.dtypes],
         "rows_count": len(df)
     }
+
+
+def load_saved_df(session_id: str):
+    path = os.path.join(BASE_TEMP_DIR, session_id, "df.pkl")
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"DataFrame not found for session_id={session_id}")
+    return joblib.load(path)
