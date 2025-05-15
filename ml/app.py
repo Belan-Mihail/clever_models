@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from ml_logic import process_data  
+from ml_logic import first_process_data  
 from flask_cors import CORS
 import os
 
@@ -24,7 +24,7 @@ def process():
             return jsonify({"status": "error", "message": "No selected file/or unexpected file type"}), 400
 
         # main logic
-        result = process_data(file)  
+        result = first_process_data(file)  
 
         return jsonify({"status": "ok", "result": result})
 
