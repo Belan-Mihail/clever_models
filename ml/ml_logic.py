@@ -23,11 +23,14 @@ def first_process_data(file):
     joblib.dump(df, os.path.join(session_path, "df.pkl"))
     
     return {
+    "status": "ok",
+    "result": {
         "session_id": session_id,
         "columns": list(df.columns),
         "columns_type": [str(dtype) for dtype in df.dtypes],
         "rows_count": len(df)
     }
+}
 
 
 def load_saved_df(session_id: str):

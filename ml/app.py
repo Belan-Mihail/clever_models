@@ -32,7 +32,7 @@ def process():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.route("api/select_columns/", methods=["POST"])
+@app.route("/api/select_columns/", methods=["POST"])
 def select_columns():
     try:
         data = request.json

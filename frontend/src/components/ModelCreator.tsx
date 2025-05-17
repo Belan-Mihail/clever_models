@@ -24,8 +24,8 @@ const ModelCreator = () => {
   };
 
   // user choose fetureas from column and send it to ML. return:
-  const [xFeatures, setXFeatures] = useState<any>(null);
-  const [yFeatures, setYFeatures] = useState<any>(null);
+  const [xFeatures, setXFeatures] = useState<string[]>([]);
+  const [yFeatures, setYFeatures] = useState<string[]>([]);
 
   const handleXFeatures = (data: any) => {
     setXFeatures(data);
