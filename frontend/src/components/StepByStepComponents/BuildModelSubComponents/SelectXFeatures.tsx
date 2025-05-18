@@ -72,7 +72,7 @@ const SelectXFeatures: React.FC<SelectXFeaturesProps> = ({
             <div className="mt-4 text-center">
               <button
                 onClick={() => setCurrentStep(1)}
-                className="p-2 bg-green-500 rounded-xl text-white text-[10px]"
+                className="p-2 bg-green-500  hover:bg-green-600 rounded-xl text-white text-[10px]"
               >
                 Next Step
               </button>

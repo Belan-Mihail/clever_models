@@ -191,3 +191,31 @@
 // // };
 
 // // export default BuildModel;
+
+
+// {modelOptions.map((model) => (
+//     <button
+//       key={model}
+//       onClick={() => handleModelChange(model)}
+//       className={`px-4 py-2 text-xs rounded-lg border ${
+//         selectedModel === model
+//           ? "bg-green-500 text-white"
+//           : "bg-white text-gray-700"
+//       }`}
+//     >
+//       {model}
+//     </button>
+//   ))}
+
+
+// <select
+//   className="text-xs p-2 border rounded"
+//   value={testSize}
+//   onChange={(e) => setTestSize(Number(e.target.value))}
+// >
+//   {[0.1, 0.2, 0.3, 0.4].map((value) => (
+//     <option key={value} value={value}>
+//       Test size: {value * 100}%
+//     </option>
+//   ))}
+// </select>

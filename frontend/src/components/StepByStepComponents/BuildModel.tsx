@@ -48,7 +48,7 @@ const BuildModel: React.FC<BuildModelProps> = ({
     <div>
       {currentStep === 0 && <SelectXFeatures setCurrentStep={setCurrentStep} firstStepGeneralAnalyse={firstStepGeneralAnalyse} xFeatures={xFeatures} handleXFeatures={handleXFeatures} />}
       {currentStep === 1 && <SelectTargetVariable setCurrentStep={setCurrentStep} firstStepGeneralAnalyse={firstStepGeneralAnalyse} yFeatures={yFeatures} xFeatures={xFeatures} handleYFeatures={handleYFeatures} />}
-      {currentStep === 2 && <SelectModel  />}
+      {currentStep === 2 && <SelectModel setCurrentStep={setCurrentStep} yFeatures={yFeatures} xFeatures={xFeatures}  />}
       {currentStep === 3 && <FinalCheck  />}
     </div>
   );

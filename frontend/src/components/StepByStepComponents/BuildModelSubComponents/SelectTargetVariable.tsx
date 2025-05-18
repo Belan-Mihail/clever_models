@@ -63,7 +63,7 @@ const SelectTargetVariable: React.FC<SelectYFeaturesProps> = ({
             </div>
           </div>
           <div className="mt-4 text-center flex gap-2 items-center justify-center">
-            <motion.div
+             <motion.div
               key="feature-table"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -71,10 +71,10 @@ const SelectTargetVariable: React.FC<SelectYFeaturesProps> = ({
               transition={{ duration: 0.4, ease: "easeInOut" }}
             >
               <button
-                onClick={() => setCurrentStep(2)}
-                className="p-2 bg-green-500 rounded-xl text-white text-[10px] min-w-[80px]"
+                onClick={() => setCurrentStep(0)}
+                className="p-2 bg-rose-500  hover:bg-rose-600 rounded-xl text-white text-[10px] min-w-[80px]"
               >
-                Next Step
+                Previous Step
               </button>
             </motion.div>
             <motion.div
@@ -85,10 +85,10 @@ const SelectTargetVariable: React.FC<SelectYFeaturesProps> = ({
               transition={{ duration: 0.4, ease: "easeInOut" }}
             >
               <button
-                onClick={() => setCurrentStep(0)}
-                className="p-2 bg-rose-500 rounded-xl text-white text-[10px] min-w-[80px]"
+                onClick={() => setCurrentStep(2)}
+                className="p-2 bg-green-500  hover:bg-green-600 rounded-xl text-white text-[10px] min-w-[80px]"
               >
-                Previous Step
+                Next Step
               </button>
             </motion.div>
           </div>
