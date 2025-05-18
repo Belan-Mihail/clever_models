@@ -64,7 +64,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       const data = await res.json();
       if (data.status === "ok") {
         handleFirstStepGeneralAnalyse(data.result);
-        setActiveComponent("SelectFeatures")
+        setActiveComponent("BuildModel")
       } else {
         setResponse("Fail upload");
         setError("unexpected file type")

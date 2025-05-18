@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-import FileUploader from "./StepByStepComponents/fileUploader";
-import SelectFeatures from "./StepByStepComponents/SelectFeatures";
+import FileUploader from "./StepByStepComponents/FileUploader";
+import BuildModel from "./StepByStepComponents/BuildModel";
 import ErrorNotification from "./ErrorNotification";
 
 const ModelCreator = () => {
@@ -25,7 +25,7 @@ const ModelCreator = () => {
 
   // user choose fetureas from column and send it to ML. return:
   const [xFeatures, setXFeatures] = useState<string[]>([]);
-  const [yFeatures, setYFeatures] = useState<string[]>([]);
+  const [yFeatures, setYFeatures] = useState<string>("");
 
   const handleXFeatures = (data: any) => {
     setXFeatures(data);
@@ -44,7 +44,7 @@ const ModelCreator = () => {
     
       {activeComponent=="FileUploader" && <FileUploader handleFirstStepGeneralAnalyse={handleFirstStepGeneralAnalyse} setError={setError} setActiveComponent={setActiveComponent} />}
       
-      {activeComponent=="SelectFeatures" && (<SelectFeatures firstStepGeneralAnalyse={firstStepGeneralAnalyse} setError={setError} setActiveComponent={setActiveComponent} handleXFeatures={handleXFeatures} handleYFeatures={handleYFeatures} xFeatures={xFeatures} yFeatures={yFeatures} />)}
+      {activeComponent=="BuildModel" && (<BuildModel firstStepGeneralAnalyse={firstStepGeneralAnalyse} setError={setError} setActiveComponent={setActiveComponent} handleXFeatures={handleXFeatures} handleYFeatures={handleYFeatures} xFeatures={xFeatures} yFeatures={yFeatures} />)}
     
     </div>
   );
