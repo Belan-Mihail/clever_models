@@ -6,15 +6,19 @@ interface FileUploaderProps {
   handleFirstStepGeneralAnalyse: (data: any) => void;
   setError: (data:any) => void;
   setActiveComponent: (data:any) => void;
+  loading: boolean,
+  setLoading: (data:boolean) => void,
+  response: string | null,
+  setResponse: (data:string | null) => void,
+
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({
-  handleFirstStepGeneralAnalyse, setError, setActiveComponent
+  handleFirstStepGeneralAnalyse, setError, setActiveComponent, loading, setLoading, response, setResponse
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [response, setResponse] = useState<string | null>(null);
+  
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   //Clicks on the hidden <input type="file">.
