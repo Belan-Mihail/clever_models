@@ -1,106 +1,92 @@
-import React, { useState } from "react";
+import React from "react";
 import SelectXFeatures from "./BuildModelSubComponents/SelectXFeatures";
 import SelectTargetVariable from "./BuildModelSubComponents/SelectTargetVariable";
 import SelectModel from "./BuildModelSubComponents/SelectModel";
 import FinalCheck from "./BuildModelSubComponents/FinalCheck";
-
-export interface FirstStepAnalyse {
-  columns: string[];
-  columns_type: string[];
-  rows_count: number;
-}
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import {
+  setCurrentStep,
+  setXFeatures,
+  setYFeatures,
+  setSelectedModel,
+  setTestSize,
+} from "../../store/slices/modelSlice";
 
 interface BuildModelProps {
   firstStepGeneralAnalyse: FirstStepAnalyse;
-  setError: (data: any) => void;
-  setActiveComponent: (componentName: string) => void;
-  handleXFeatures: (features: string[]) => void;
-  handleYFeatures: (features: string) => void;
-  xFeatures: string[];
-  yFeatures: string;
-  selectedModel: string;
-  setSelectedModel: (model: string) => void;
-  testSize: number;
-  setTestSize: (value: number) => void;
-  loading: boolean,
-  setLoading: (data:boolean) => void,
-  response: string | null,
-  setResponse: (data:string | null) => void,
-  handleTrainModel: (data:any) => void,
+  error: any;
+  loading: boolean;
+  response: string | null;
+  handleTrainModel: (data: any) => void;
+  setResponse: (data: string | null) => void;
 }
 
 const BuildModel: React.FC<BuildModelProps> = ({
   firstStepGeneralAnalyse,
-  setError,
-  setActiveComponent,
-  handleXFeatures,
-  handleYFeatures,
-  xFeatures,
-  yFeatures,
-  selectedModel,
-  setSelectedModel,
-  testSize,
-  setTestSize,
+  error,
   loading,
-  setLoading,
   response,
-  setResponse,
   handleTrainModel,
-  
+  setResponse,
 }) => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const dispatch = useAppDispatch();
+
+  const currentStep = useAppSelector((state) => state.model.currentStep);
+  const xFeatures = useAppSelector((state) => state.model.xFeatures);
+  const yFeatures = useAppSelector((state) => state.model.yFeatures);
+  const selectedModel = useAppSelector((state) => state.model.selectedModel);
+  const testSize = useAppSelector((state) => state.model.testSize);
 
   if (
     !firstStepGeneralAnalyse ||
     !Array.isArray(firstStepGeneralAnalyse.columns) ||
     !Array.isArray(firstStepGeneralAnalyse.columns_type)
   ) {
-    return (
-      <div className="text-center text-sm text-gray-500 p-4">
-        Loading data...
-      </div>
-    );
+    return <div className="text-center text-sm text-gray-500 p-4">Loading data...</div>;
   }
 
   return (
     <div>
       {currentStep === 0 && (
         <SelectXFeatures
-          setCurrentStep={setCurrentStep}
+          setCurrentStep={(step) => dispatch(setCurrentStep(step))}
           firstStepGeneralAnalyse={firstStepGeneralAnalyse}
           xFeatures={xFeatures}
-          handleXFeatures={handleXFeatures}
+          handleXFeatures={(features) => dispatch(setXFeatures(features))}
         />
       )}
       {currentStep === 1 && (
         <SelectTargetVariable
-          setCurrentStep={setCurrentStep}
+          setCurrentStep={(step) => dispatch(setCurrentStep(step))}
           firstStepGeneralAnalyse={firstStepGeneralAnalyse}
           yFeatures={yFeatures}
           xFeatures={xFeatures}
-          handleYFeatures={handleYFeatures}
+          handleYFeatures={(feature) => dispatch(setYFeatures(feature))}
         />
       )}
       {currentStep === 2 && (
         <SelectModel
-          setCurrentStep={setCurrentStep}
+          setCurrentStep={(step) => dispatch(setCurrentStep(step))}
           yFeatures={yFeatures}
           xFeatures={xFeatures}
           selectedModel={selectedModel}
-          setSelectedModel={setSelectedModel}
+          setSelectedModel={(model) => dispatch(setSelectedModel(model))}
           testSize={testSize}
-          setTestSize={setTestSize}
+          setTestSize={(size) => dispatch(setTestSize(size))}
         />
       )}
       {currentStep === 3 && (
-        <FinalCheck 
+        <FinalCheck
           yFeatures={yFeatures}
           xFeatures={xFeatures}
           selectedModel={selectedModel}
           testSize={testSize}
           handleTrainModel={handleTrainModel}
+          loading={loading}
+          response={response}
+          error={error}
         />
-        )}
+      )}
     </div>
   );
 };

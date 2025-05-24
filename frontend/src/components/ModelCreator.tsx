@@ -1,54 +1,40 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import FileUploader from "./StepByStepComponents/FileUploader";
 import BuildModel from "./StepByStepComponents/BuildModel";
 import ErrorNotification from "./ErrorNotification";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import {
+  setError,
+  setLoading,
+  setResponse,
+  setActiveComponent,
+  setTrainModelResult,
+} from "../store/slices/modelSlice";
 
 const ModelCreator = () => {
-  // general states and function
-  const [error, setError] = useState<any>(null);
-  const [activeComponent, setActiveComponent] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [response, setResponse] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    setActiveComponent("FileUploader");
-  }, []);
+  const {
+    activeComponent,
+    error,
+    loading,
+    response,
+    firstStepGeneralAnalyse,
+    xFeatures,
+    yFeatures,
+    selectedModel,
+    testSize,
+  } = useAppSelector((state) => state.model);
 
-  // general anlyse file after upload (validation file)- return: object columns, column_type, rows_counr
-  const [firstStepGeneralAnalyse, setFirstStepGeneralAnalyse] =
-    useState<any>(null);
-
-  const handleFirstStepGeneralAnalyse = (data: any) => {
-    setFirstStepGeneralAnalyse(data);
-  };
-
-  // user choose fetureas from column and send it to ML. return:
-  const [xFeatures, setXFeatures] = useState<string[]>([]);
-  const [yFeatures, setYFeatures] = useState<string>("");
-  const [selectedModel, setSelectedModel] = useState<string>("");
-  const [testSize, setTestSize] = useState<number>(0.2);
-
-  const handleXFeatures = (data: any) => {
-    setXFeatures(data);
-  };
-
-  const handleYFeatures = (data: any) => {
-    setYFeatures(data);
-  };
-
-  // general anlyse file after upload (validation file)- return: object columns, column_type, rows_counr
-  const [onTrainModelResult, setOnTrainModelResult] =
-    useState<any>(null);
-
-  const handleTrainModelResult = (data: any) => {
-    setOnTrainModelResult(data);
-  };
-
-  const handleTrainModel = async (xFeatures:string[], yFeatures:string, selectedModel:string, testSize:number) => {
-    setLoading(true);
-    setError(null);
-    setResponse('');
+  const handleTrainModel = async (
+    xFeatures: string[],
+    yFeatures: string,
+    selectedModel: string,
+    testSize: number
+  ) => {
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+    dispatch(setResponse(""));
 
     const formData = new FormData();
     formData.append("xFeatures", JSON.stringify(xFeatures));
@@ -64,56 +50,50 @@ const ModelCreator = () => {
 
       const data = await res.json();
       if (data.status === "ok") {
-        setOnTrainModelResult(data.result);
-        
+        dispatch(setTrainModelResult(data.result));
       } else {
-        setResponse("Fail upload");
-        setError("unexpected file type")
+        dispatch(setResponse("Fail upload"));
+        dispatch(setError("Unexpected file type"));
       }
-    } catch (err) {
-      setResponse("Fail upload");
-      setError(err)
-      console.log(err);
+    } catch (err: any) {
+      dispatch(setResponse("Fail upload"));
+      dispatch(setError(err.message || "Error"));
+      console.error(err);
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
-  } 
+  };
 
   return (
-    <div className={`w-[85%] h-full p-4 bg-white`}>
+    <div className="w-[85%] h-full p-4 bg-white">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10">
-        {error && <ErrorNotification error={error} setError={setError} />}
+        {error && <ErrorNotification error={error} setError={() => dispatch(setError(null))} />}
       </div>
 
-      {activeComponent == "FileUploader" && (
+      {activeComponent === "FileUploader" && (
         <FileUploader
-          handleFirstStepGeneralAnalyse={handleFirstStepGeneralAnalyse}
-          setError={setError}
-          setActiveComponent={setActiveComponent}
+          setActiveComponent={(comp) => dispatch(setActiveComponent(comp))}
+          setError={(err) => dispatch(setError(err))}
           loading={loading}
-          setLoading={setLoading}
+          setLoading={(val) => dispatch(setLoading(val))}
           response={response}
-          setResponse={setResponse}
+          setResponse={(msg) => dispatch(setResponse(msg))}
         />
       )}
 
-      {activeComponent == "BuildModel" && (
+      {activeComponent === "BuildModel" && (
         <BuildModel
           firstStepGeneralAnalyse={firstStepGeneralAnalyse}
-          setError={setError}
-          setActiveComponent={setActiveComponent}
-          handleXFeatures={handleXFeatures}
-          handleYFeatures={handleYFeatures}
+          error={error}
+          setActiveComponent={(comp) => dispatch(setActiveComponent(comp))}
           xFeatures={xFeatures}
           yFeatures={yFeatures}
           selectedModel={selectedModel}
-          setSelectedModel={setSelectedModel}
           testSize={testSize}
-          setTestSize={setTestSize}
           loading={loading}
-          setLoading={setLoading}
+          setLoading={(val) => dispatch(setLoading(val))}
           response={response}
-          setResponse={setResponse}
+          setResponse={(msg) => dispatch(setResponse(msg))}
           handleTrainModel={handleTrainModel}
         />
       )}

@@ -1,11 +1,12 @@
 import React from "react";
-import { createRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from "./App.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import './index.css';
 
-// import LoginPage from "./pages/LoginPage.tsx";
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 // Define routes
 const router = createBrowserRouter([
@@ -17,16 +18,15 @@ const router = createBrowserRouter([
         path: '/',
         element: <HomePage />,
       },
-      // {
-      //   path: '/login',
-      //   element: <LoginPage />,
-      // },
+      // other routes can go here
     ]
   }
 ]);
 
 createRoot(document.getElementById('root')!).render(
-
+  <React.StrictMode>
+    <Provider store={store}>
       <RouterProvider router={router} />
-
-)
+    </Provider>
+  </React.StrictMode>
+);
