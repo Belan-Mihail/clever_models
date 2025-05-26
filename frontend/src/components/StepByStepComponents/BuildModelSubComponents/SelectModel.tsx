@@ -1,15 +1,11 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-interface SelectModelProps {
-  yFeatures: string;
-  xFeatures: string[];
-  setCurrentStep: (current: number) => void;
-  selectedModel: string;
-  setSelectedModel: (model: string) => void;
-  testSize: number;
-  setTestSize: (value: number) => void;
-}
+import { useAppSelector, useAppDispatch } from "../../../store/hooks";
+import {
+  setCurrentStep,
+  setSelectedModel,
+  setTestSize,
+} from "../../../store/slices/modelSlice";
 
 const modelOptions = [
   "Linear Regression",
@@ -20,15 +16,12 @@ const modelOptions = [
 
 const modelSize = [0.1, 0.2, 0.3, 0.4];
 
-const SelectModel: React.FC<SelectModelProps> = ({
-  setCurrentStep,
-  yFeatures,
-  xFeatures,
-  selectedModel,
-  setSelectedModel,
-  testSize,
-  setTestSize,
-}) => {
+const SelectModel: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { yFeatures, xFeatures, selectedModel, testSize } = useAppSelector(
+    (state) => state.model
+  );
+
   return (
     <div>
       <h2 className="text-lg font-semibold mb-2 text-center">
@@ -54,7 +47,7 @@ const SelectModel: React.FC<SelectModelProps> = ({
                       ? "bg-blue-500 text-white"
                       : "bg-white text-black"
                   }`}
-                  onClick={() => setSelectedModel(model)}
+                  onClick={() => dispatch(setSelectedModel(model))}
                 >
                   {model}
                 </button>
@@ -73,7 +66,7 @@ const SelectModel: React.FC<SelectModelProps> = ({
                       ? "bg-blue-500 text-white"
                       : "bg-white text-black"
                   }`}
-                  onClick={() => setTestSize(size)}
+                  onClick={() => dispatch(setTestSize(size))}
                 >
                   {size * 100}%
                 </button>
@@ -90,7 +83,7 @@ const SelectModel: React.FC<SelectModelProps> = ({
               transition={{ duration: 0.4, ease: "easeInOut" }}
             >
               <button
-                onClick={() => setCurrentStep(0)}
+                onClick={() => dispatch(setCurrentStep(0))}
                 className="p-2 bg-rose-500 hover:bg-rose-600 rounded-xl text-white text-[10px] min-w-[80px]"
               >
                 X features
@@ -105,7 +98,7 @@ const SelectModel: React.FC<SelectModelProps> = ({
               transition={{ duration: 0.4, ease: "easeInOut" }}
             >
               <button
-                onClick={() => setCurrentStep(1)}
+                onClick={() => dispatch(setCurrentStep(1))}
                 className="p-2 bg-orange-500 hover:bg-orange-600 rounded-xl text-white text-[10px] min-w-[80px]"
               >
                 Y feature
@@ -120,7 +113,7 @@ const SelectModel: React.FC<SelectModelProps> = ({
               transition={{ duration: 0.4, ease: "easeInOut" }}
             >
               <button
-                onClick={() => setCurrentStep(3)}
+                onClick={() => dispatch(setCurrentStep(3))}
                 className="p-2 bg-green-500 hover:bg-green-600 rounded-xl text-white text-[10px] min-w-[80px]"
               >
                 Next Step

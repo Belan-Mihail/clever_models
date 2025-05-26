@@ -6,7 +6,8 @@ import {
   setError,
   setFirstStepGeneralAnalyse,
   setLoading,
-  setResponse
+  setResponse,
+  setSessionId,
 } from "../../store/slices/modelSlice";
 
 const FileUploader: React.FC = () => {
@@ -17,9 +18,7 @@ const FileUploader: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
-  const handleFileClick = () => {
-    fileInputRef.current?.click();
-  };
+  const handleFileClick = () => fileInputRef.current?.click();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -30,11 +29,9 @@ const FileUploader: React.FC = () => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragOver(false);
-    const droppedFile = e.dataTransfer.files?.[0];
-    if (droppedFile) {
-      setFile(droppedFile);
-      dispatch(setResponse(null));
-    }
+    const droppedFile = e.dataTransfer.files?.[0] || null;
+    setFile(droppedFile);
+    dispatch(setResponse(null));
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -42,14 +39,15 @@ const FileUploader: React.FC = () => {
     setIsDragOver(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragOver(false);
-  };
+  const handleDragLeave = () => setIsDragOver(false);
 
   const handleUpload = async () => {
     if (!file) return;
 
     dispatch(setLoading(true));
+    dispatch(setResponse(null));
+    dispatch(setError(null));
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -60,17 +58,19 @@ const FileUploader: React.FC = () => {
       });
 
       const data = await res.json();
+
       if (data.status === "ok") {
         dispatch(setFirstStepGeneralAnalyse(data.result));
         dispatch(setActiveComponent("BuildModel"));
+        dispatch(setSessionId(data.result.session_id));
       } else {
         dispatch(setResponse("Fail upload"));
-        dispatch(setError("unexpected file type"));
+        dispatch(setError("Unexpected file type"));
       }
     } catch (err: any) {
       dispatch(setResponse("Fail upload"));
       dispatch(setError(err.toString()));
-      console.log(err);
+      console.error(err);
     } finally {
       dispatch(setLoading(false));
     }
@@ -78,9 +78,9 @@ const FileUploader: React.FC = () => {
 
   const clearInput = () => {
     setFile(null);
-    dispatch(setLoading(false));
-    dispatch(setResponse(null));
     dispatch(setError(null));
+    dispatch(setResponse(null));
+    dispatch(setLoading(false));
   };
 
   return (
@@ -152,14 +152,10 @@ const FileUploader: React.FC = () => {
             {file && (
               <motion.button
                 onClick={handleUpload}
-                className="text-xs p-2 bg-amber-500 text-white hover:bg-white hover:text-amber-500 hover:border-1 hover:border-amber-500 rounded"
+                className="text-xs p-2 bg-amber-500 text-white hover:bg-white hover:text-amber-500 hover:border hover:border-amber-500 rounded"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  delay: 0.3,
-                  duration: 0.5,
-                  ease: "easeOut",
-                }}
+                transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
               >
                 {loading ? "Loading..." : "Start Processing"}
               </motion.button>

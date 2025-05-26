@@ -219,3 +219,24 @@
 //     </option>
 //   ))}
 // </select>
+
+
+// await fetch("http://127.0.0.1:5000/api/save_model", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify({
+//     model_id: modelId,
+//     name: "my_regression_model", // имя для сохранения
+//   }),
+// });
+
+
+// await fetch("http://127.0.0.1:5000/api/delete_model", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify({ model_id: modelId }),
+// });
