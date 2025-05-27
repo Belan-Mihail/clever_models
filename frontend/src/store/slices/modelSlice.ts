@@ -13,13 +13,6 @@ export const trainModelAsync = createAsyncThunk<
 >("model/trainModel", async (params, thunkAPI) => {
   const { xFeatures, yFeature, selectedModel, testSize, sessionId } = params;
 
-  const formData = new FormData();
-  formData.append("xFeatures", JSON.stringify(xFeatures));
-  formData.append("yFeatures", yFeature);
-  formData.append("selectedModel", selectedModel);
-  formData.append("testSize", testSize.toString());
-  formData.append("sessionId", sessionId);
-
   try {
     const response = await fetch("http://127.0.0.1:5000/api/select_columns", {
       method: "POST",
@@ -52,6 +45,16 @@ export const trainModelAsync = createAsyncThunk<
   }
 });
 
+interface savedModel {
+  sessionId: string;
+  model: string;
+  xFeatures: string[];
+  yFeatures: string;
+  testSize: number;
+  metrics: {mse: number; mae: number }
+  savedAt: string,
+}
+
 interface ModelState {
   error: string | null;
   activeComponent: string;
@@ -67,6 +70,7 @@ interface ModelState {
   metrics: null | { mse: number, mae: number}
   modelId: null | string;
   modelSaved: boolean;
+  savedModels: savedModel[];
 }
 
 const initialState: ModelState = {
@@ -83,7 +87,9 @@ const initialState: ModelState = {
   sessionId: null,
   metrics: null,
   modelId: null,
-  modelSaved: false
+  modelSaved: false,
+  savedModels: [] as savedModel[],
+
 };
 
 export const modelSlice = createSlice({
@@ -120,14 +126,26 @@ export const modelSlice = createSlice({
     setCurrentStep(state, action: PayloadAction<number>) {
       state.currentStep = action.payload;
     },
-    setModelSaved(state, action: PayloadAction<boolean>) {
-      state.modelSaved = action.payload;
+    resetModelState(state) {
+  state.error = null;
+  state.activeComponent = "FileUploader";
+  state.loading = false;
+  state.response = null;
+  state.firstStepGeneralAnalyse = null;
+  state.xFeatures = [];
+  state.yFeatures = "";
+  state.selectedModel = "";
+  state.testSize = 0.2;
+  state.currentStep = 0;
+  state.sessionId = null;
+  state.metrics = null;
+  state.modelId = null;
+  state.modelSaved = false;
+},
+    saveTrainedModel(state, action: PayloadAction<savedModel>) {
+      state.savedModels.push(action.payload);
+      state.modelSaved = true;
     },
-    clearModelInfo(state) {
-    state.metrics = null;
-    state.modelId = null;
-    state.modelSaved = false;
-  },
     setSessionId(state, action: PayloadAction<string | null>) {
       state.sessionId = action.payload;
     },
@@ -144,7 +162,7 @@ export const modelSlice = createSlice({
       .addCase(trainModelAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.metrics = action.payload.metrics;
-        state.modelId = action.payload.model_id;
+        state.modelId = action.payload.modelId;
         state.modelSaved = false;
         state.currentStep = 4;
       })
@@ -168,6 +186,8 @@ export const {
   setTestSize,
   setCurrentStep,
   setSessionId,
+  saveTrainedModel,
+  resetModelState,
 } = modelSlice.actions;
 
 export default modelSlice.reducer;
