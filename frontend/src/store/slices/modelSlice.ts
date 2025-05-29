@@ -51,7 +51,7 @@ interface savedModel {
   xFeatures: string[];
   yFeatures: string;
   testSize: number;
-  metrics: {mse: number; mae: number }
+  metrics: {mse: number; mae: number, r2: number }
   savedAt: string,
 }
 
@@ -67,7 +67,7 @@ interface ModelState {
   testSize: number;
   currentStep: number;
   sessionId: null | string;
-  metrics: null | { mse: number, mae: number}
+  metrics: null | { mse: number, mae: number, r2:number}
   modelId: null | string;
   modelSaved: boolean;
   savedModels: savedModel[];
