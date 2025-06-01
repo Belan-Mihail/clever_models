@@ -16,7 +16,7 @@ const ModelReview: React.FC = () => {
     yFeatures,
     testSize,
     metrics,
-    sessionId,
+    modelId,
   } = useSelector((state: RootState) => state.model);
 
   const [showModal, setShowModal] = React.useState(false);
@@ -27,17 +27,18 @@ const ModelReview: React.FC = () => {
   };
 
   const handleDelete = async () => {
-  if (!sessionId) {
+  if (!modelId) {
     
   toast.error("Session ID not found. Cannot delete model.");
   return
   } 
 
+  
   try {
     const response = await fetch("http://127.0.0.1:5000/api/delete_model", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model_id: sessionId }),
+      body: JSON.stringify({ model_id: modelId }),
     });
 
     if (!response.ok) {
@@ -61,15 +62,15 @@ const ModelReview: React.FC = () => {
 
 
   const confirmSaveModel = async () => {
-    if (!sessionId || !metrics || !nameInput.trim()) return;
+    if (!modelId || !metrics || !nameInput.trim()) return;
 
     try {
       const response = await fetch("http://127.0.0.1:5000/api/save_model", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model_id: sessionId,
-          name: sessionId + "_" + nameInput.trim(),
+          model_id: modelId,
+          name: modelId + "_" + nameInput.trim(),
         }),
       });
 
