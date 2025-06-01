@@ -17,6 +17,7 @@ const ModelReview: React.FC = () => {
     testSize,
     metrics,
     modelId,
+    sessionId,
   } = useSelector((state: RootState) => state.model);
 
   const [showModal, setShowModal] = React.useState(false);
@@ -38,12 +39,14 @@ const ModelReview: React.FC = () => {
     const response = await fetch("http://127.0.0.1:5000/api/delete_model", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model_id: modelId }),
+      body: JSON.stringify({ model_id: modelId, session_id: sessionId }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.log(`Server error: ${response.status} - ${errorText}`)
       throw new Error(`Server error: ${response.status} - ${errorText}`);
+      
     }
 
     const data = await response.json();
@@ -51,6 +54,7 @@ const ModelReview: React.FC = () => {
     if (data.status === "ok") {
       toast.success("Model was deleted successfully");
       dispatch(resetModelState());
+      
     } else {
       toast.error(`Error: ${data.message}`);
     }
@@ -71,6 +75,7 @@ const ModelReview: React.FC = () => {
         body: JSON.stringify({
           model_id: modelId,
           name: modelId + "_" + nameInput.trim(),
+          session_id: sessionId,
         }),
       });
 
