@@ -1,28 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { fetchModels } from "../store/slices/TreeModelsSlice";
 
 const ModelTree: React.FC = () => {
-  const [models, setModels] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const models = useAppSelector((state) => state.treeModels.list)
+  const loading = useAppSelector((state) => state.treeModels.loading);
 
   useEffect(() => {
-    const fetchModels = async () => {
-      try {
-        const res = await fetch("http://127.0.0.1:5000/api/list_models");
-        const data = await res.json();
-        if (data.status === "ok") {
-          setModels(data.models);
-        } else {
-          console.error("Failed to fetch models:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching models:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchModels();
-  }, []);
+    dispatch(fetchModels())
+  }, [dispatch]);
 
   return (
     <div className="w-[15%] h-full bg-gray-100 p-4 overflow-y-auto">

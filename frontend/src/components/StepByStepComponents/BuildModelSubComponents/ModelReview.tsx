@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import {
   setCurrentStep,
@@ -7,9 +7,11 @@ import {
 } from "../../../store/slices/modelSlice";
 import type { RootState } from "../../../store/store";
 import { toast } from "sonner";
+import { fetchModels } from "../../../store/slices/TreeModelsSlice";
+import { useAppDispatch } from "../../../store/hooks";
 
 const ModelReview: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     selectedModel,
     xFeatures,
@@ -84,6 +86,7 @@ const ModelReview: React.FC = () => {
         toast.success(`Model "${nameInput}" was saved successfully`);
         dispatch(resetModelState());
         setShowModal(false);
+        dispatch(fetchModels())
       } else {
         toast.error(`Error: ${data.message}`);
       }
